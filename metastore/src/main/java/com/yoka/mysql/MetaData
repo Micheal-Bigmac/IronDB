@@ -11,17 +11,28 @@ IronDb
 					 2  	333		true	BitMap
 					 3		555		true	ElasticSearch
 				IronDBColumns
-					{id	columnName	type	IronDBTables_ID}
-					 1    id	 	int		1
-					 2	  name		string	1
-					 3		sex		string	1
+					{id	columnName	type	IronDBTables_ID     Comments}
+					 1    id	 	int		1                   主键
+					 2	  name		string	1                   姓名
+					 3		sex		string	1                   性别
 
 IronDBCache
 	String tables  ---> JSONArray(JSONObject(row))
-						[{id:1,tableName:xxx,status:true,storage_type:hbase},
-						 {id:2,tableName:333,status:true,storage_type:BitMap},
-						 {id:3,tableName:555,status:true,storage_type:ElasticSearch}
+						[{id:1,tablename:xxx,status:true,storage_type:hbase},
+						 {id:2,tablename:333,status:true,storage_type:BitMap},
+						 {id:3,tablename:555,status:true,storage_type:ElasticSearch}
 						 ]
+
+
+    JSONArray(JSONObject(row))	 To  Map
+    			    ---->[
+				        {tableName:xxx, tableInfo:{status:true,storage_type:hbase}},
+				        {tableName:333,tableInfo:{status:true,storage_type:BitMap}},
+				        {tableName:555,tableInfo:{status:true,storage_type:ElasticSearch}}
+				         ]
+
+
+
 
 endPoint
 	tableinfo
@@ -30,12 +41,26 @@ endPoint
 	Map<String,tableInfo> =====Map<表名,表设置信息>
 
 
-	select tablename,columnName,type,storage_type from IronDBTables,IronDBColumns where IronDBTables.id=IronDBColumns.IronDBTables_ID
+
+
+
+
+
+
+
+
+
+
+
+	select tablename,columnName,type，Comments from IronDBTables,IronDBColumns where IronDBTables.id=IronDBColumns.IronDBTables_ID
 	----->JSONArray(JSONObject(Row))
-		[{tablename:xxx,columnName:id,type:int,storage_type:hbase},
-		{tablename:xxx,columnName:name,type:String,storage_type:hbase}，
-		{tablename:xxx,columnName:sex,type:String,storage_type:hbase}，
+		[{tablename:xxx,columnName:id,type:int,Comments:ssss},
+		{tablename:xxx,columnName:name,type:String,Comments:xxxx}，
+		{tablename:xxx,columnName:sex,type:String}，
 		]
+
+    ------- {tableName:xxxx,tableInfo:{colu}}
+
 
 endPoint
 	Schema

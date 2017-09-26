@@ -1,5 +1,6 @@
-package com.yoka.irondb;
+package com.yoka.util;
 
+import com.yoka.irondb.bean.Token;
 import org.apache.log4j.Logger;
 
 import java.security.MessageDigest;
@@ -23,7 +24,7 @@ public class TokenUtil {
 
     private static Map<Integer, Token> tokenMap = new ConcurrentHashMap<>();
     private static TokenUtil tokenUtil = null;
-    static ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    public static ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     static {
         logger.info("\n===============进入TokenUtil静态代码块==================");

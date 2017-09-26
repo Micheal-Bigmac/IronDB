@@ -1,38 +1,50 @@
 package com.yoka.executor;
 
-import com.yoka.mysql.ResultCode;
-
 import java.util.List;
 
 /**
  * Created by Micheal on 2017/9/23.
  */
-public class SqlTask {
 
-    private ResultCode errorCode;
-    private Object result;
+/**
+ * DMLExecutor   SqlTask<T>  返回结果为 int[].class  List<Sql> Sqls 执行结果返回值</Sql></Sqls></>
+ *DQLExecutor SqlTask<T> </T>
+ */
 
-    public Object getResult() {
-        return result;
-    }
+public class SqlTask<T> {
 
     private List<String> sqls;
 
-    public SqlTask(List<String> sqls) {
+    private T result;
+    private Class<?> clazz;
+
+    public SqlTask(List<String> sqls, Class<?> clazz) {
+        this.sqls = sqls;
+        this.clazz = clazz;
+    }
+
+    public void setSqls(List<String> sqls) {
         this.sqls = sqls;
     }
+
+    public Class<?> getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Class<?> clazz) {
+        this.clazz = clazz;
+    }
+
+    public T getResult() {
+        return result;
+    }
+
 
     public List<String> getSqls() {
         return sqls;
     }
-    public void setResult(Object result) {
+    public void setResult(T result) {
         this.result = result;
     }
 
-    public void setErrorCode(ResultCode errorCode) {
-        this.errorCode = errorCode;
-    }
-    public void setSqls(List<String> sqls) {
-        this.sqls = sqls;
-    }
 }

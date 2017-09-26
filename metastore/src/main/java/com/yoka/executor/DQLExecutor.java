@@ -39,6 +39,7 @@ public class DQLExecutor implements Callable<SqlTask> {
             for (String Sql : sqls) {
                 resultSet = statement.executeQuery(Sql);
                 metaData = resultSet.getMetaData();
+
                 int columnCount = metaData.getColumnCount();
                 while (resultSet.next()) {
                     jsonObj = new JSONObject();

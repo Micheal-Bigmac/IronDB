@@ -9,6 +9,7 @@ import com.yoka.irondb.bean.TableInfo;
 import com.yoka.irondb.bean.TableSchema;
 import javafx.collections.transformation.SortedList;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class IronDBMetaDataCache {
     private Map<String, TableInfo> tables;    // 分段 并发lock  ConcurrentHashMap
-    private Map<String, SortedList<TableSchema>> table_metaData;  //ConcurrentHashMap
+
+    private Map<String, List<TableSchema>> table_metaData;  //ConcurrentHashMap
 
     public Map<String, TableInfo> getTables() {
         return tables;
@@ -27,11 +29,11 @@ public class IronDBMetaDataCache {
         this.tables = new ConcurrentHashMap(tables);
     }
 
-    public Map<String, SortedList<TableSchema>> getTable_metaData() {
+    public Map<String, List<TableSchema>> getTable_metaData() {
         return table_metaData;
     }
 
-    public void setTable_metaData(Map<String, SortedList<TableSchema>> table_metaData) {
-        this.table_metaData = new ConcurrentHashMap(table_metaData);
+    public void setTable_metaData(Map<String, List<TableSchema>> table_metaData) {
+        this.table_metaData = table_metaData;
     }
 }

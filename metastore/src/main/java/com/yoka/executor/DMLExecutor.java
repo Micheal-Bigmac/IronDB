@@ -41,6 +41,8 @@ public class DMLExecutor implements Callable<SqlTask> {
                 statement = con.createStatement();
                 statement.addBatch(sqls.get(i));
             }
+            int[] rows = statement.executeBatch();
+            task.setResult(rows);
             con.commit();
         } catch (SQLException e) {
             // ErrorCode 处理 返回Task 对象

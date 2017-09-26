@@ -1,5 +1,6 @@
 package com.yoka.irondb;
 
+import com.yoka.irondb.bean.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

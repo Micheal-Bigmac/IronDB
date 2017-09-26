@@ -4,16 +4,17 @@ package com.yoka.irondb.bean;
  * Created by Micheal on 2017/9/24.
  */
 public class TableSchema {
+    String tablename;
     private String  type;
-    private String  name;
-    private String comments;
+    private String  columnName;
+    private String Comments;
 
-    public String getComments() {
-        return comments;
+    public String getTablename() {
+        return tablename;
     }
 
-    public void setComments(String comments) {
-        this.comments = comments;
+    public void setTablename(String tablename) {
+        this.tablename = tablename;
     }
 
     public String getType() {
@@ -24,11 +25,19 @@ public class TableSchema {
         this.type = type;
     }
 
-    public String getName() {
-        return name;
+    public String getColumnName() {
+        return columnName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+
+    public String getComments() {
+        return Comments;
+    }
+
+    public void setComments(String comments) {
+        Comments = comments;
     }
 }

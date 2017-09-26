@@ -8,6 +8,8 @@ import com.yoka.irondb.bean.TableSchema;
 import com.yoka.mysql.ConnectionFactory;
 import com.yoka.mysql.IronDBMetaDataCache;
 import com.yoka.mysql.IronDbSchemeFactory;
+import com.yoka.util.JSONToMap;
+import com.yoka.util.TokenUtil;
 import javafx.collections.transformation.SortedList;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
@@ -40,15 +42,17 @@ public class Dispatcher {
         List<String> tables=new ArrayList<>();
         String tablesInfo="select * from IronDBtables";
         tables.add(tablesInfo);
-        SqlTask tablesInfoTask=new SqlTask(tables);
+
+        SqlTask tablesInfoTask=new SqlTask(tables,String.class);
         DQLExecutor tableInfoQuery=new DQLExecutor(connectPool,tablesInfoTask);
         Future<SqlTask> resultTableInfo = executorService.submit(tableInfoQuery);
         while (resultTableInfo.isDone()){
             SqlTask sqlTask = null;
             try {
                 sqlTask = resultTableInfo.get();
-                Map<String, TableInfo> result = (Map<String, TableInfo>) sqlTask.getResult();
-                this.metaDataCache.setTables(result); // Map 转换成ConcurrentHashMap
+                String result1 = (String) sqlTask.getResult();
+                Map<String, TableInfo> tableInfoMap = JSONToMap.StringToMapForTableInfo(result1);
+                this.metaDataCache.setTables(tableInfoMap); // Map 转换成ConcurrentHashMap
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -60,14 +64,15 @@ public class Dispatcher {
         List<String> tableScheme=new ArrayList<>();
         String tableSchemaInfo="select tablename,columnName,type,storage_type from IronDBTables,IronDBColumns where IronDBTables.id=IronDBColumns.IronDBTables_ID";
         tableScheme.add(tableSchemaInfo);
-        SqlTask tablesSchemaTask=new SqlTask(tables);
+        SqlTask tablesSchemaTask=new SqlTask(tables, String.class);
         DQLExecutor tableSchemaQuery=new DQLExecutor(connectPool,tablesSchemaTask);
         Future<SqlTask> resultTableSchema = executorService.submit(tableSchemaQuery);
         while (resultTableSchema.isDone()){
             SqlTask sqlTask = null;
             try {
                 sqlTask = resultTableSchema.get();
-                Map<String, SortedList<TableSchema>> result = (Map<String, SortedList<TableSchema>>) sqlTask.getResult();
+                String result1 = (String) sqlTask.getResult();
+                Map<String, List<TableSchema>> result =JSONToMap.StringToMapForTableMetaData(result1);
                 this.metaDataCache.setTable_metaData(result); // Map 转换成ConcurrentHashMap
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -96,6 +101,7 @@ public class Dispatcher {
                 return thread;
             }
         };
+
         executorService=new ThreadPoolExecutor(poolSize,poolMaxSize,keepAliveTime, TimeUnit.SECONDS,new LinkedBlockingDeque<Runnable>(10),threadFactory); // 是否指定 任务等待队列大小 目前是10个//        pool.submit()
 
 
@@ -110,8 +116,9 @@ public class Dispatcher {
             @Override
             public void run(){
                 // log  write
-                connectPool.close();
-                executorService.shutdown();
+                connectPool.close();              // 关闭数据库连接池
+                executorService.shutdown();       // 关闭work 线程池
+                TokenUtil.scheduler.shutdown();  // 关闭 定时器调度
             }
         });
 

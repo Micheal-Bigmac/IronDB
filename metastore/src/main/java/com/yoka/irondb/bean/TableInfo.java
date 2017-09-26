@@ -4,19 +4,17 @@ package com.yoka.irondb.bean;
  * Created by Micheal on 2017/9/24.
  */
 public class TableInfo {
-    private String tableName;  // 该字段不用   存储在Map 方便判断是否存在表
-
+    private String tablename;  // 该字段不用   存储在Map 方便判断是否存在表
     private boolean status;
     private String	storage_type;
 
-    public String getTableName() {
-        return tableName;
+    public String getTablename() {
+        return tablename;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setTablename(String tablename) {
+        this.tablename = tablename;
     }
-
     //权限部分
 
     public boolean isStatus() {
@@ -33,5 +31,14 @@ public class TableInfo {
 
     public void setStorage_type(String storage_type) {
         this.storage_type = storage_type;
+    }
+
+    @Override
+    public String toString() {
+        return "TableInfo{" +
+                "tablename='" + tablename + '\'' +
+                ", status=" + status +
+                ", storage_type='" + storage_type + '\'' +
+                '}';
     }
 }

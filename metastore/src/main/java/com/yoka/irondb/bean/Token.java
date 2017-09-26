@@ -1,4 +1,4 @@
-package com.yoka.irondb;
+package com.yoka.irondb.bean;
 
 import java.io.Serializable;
 

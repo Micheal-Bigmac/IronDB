@@ -37,8 +37,9 @@ public class DDLExecutor implements Callable<SqlTask> {
                 statement = con.createStatement();
                 statement.addBatch(sqls.get(i));
             }
+            int[] rows = statement.executeBatch();
+            task.setResult(rows);
             con.commit();
-            task.setResult(1);
         } catch (SQLException e) {
             // ErrorCode 处理 返回Task 对象
             e.printStackTrace();
