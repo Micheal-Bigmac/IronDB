@@ -20,6 +20,8 @@ public class SqlParser {
     private static final String addTableSqls = "insert into IronDBTables (id,tablename,status,storage_Type) values(";
     private static final String addTableColumnSqls = "insert into IronDBColumns (column_name,type,irondb_id,suppor_function) values (";
 
+
+
     public static List<String> parseCreatTable(Statement parse) {
         TableInfo tableInfo = new TableInfo();
         List<TableSchema> tableSchemas = new ArrayList<>();
