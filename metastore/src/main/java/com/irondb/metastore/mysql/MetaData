@@ -1,0 +1,70 @@
+table MetaData
+
+
+并发修改 注意！！
+
+IronDb
+		SystemDB
+				IronDBTables
+					{id  tablename	status	storage_Type}
+					 1		xxx		true	detail
+					 2  	333		true	preagg
+					 3		555		true	detail
+				IronDBColumns
+					{id	columnName	type	irondb_id     comments    supportFunction}
+					 1    id	 	int		1                   主键          sum|max|max
+					 2	  name		string	1                   姓名              override
+					 3		sex		string	1                   性别               bitmap0
+
+IronDBCache
+	String tables  ---> JSONArray(JSONObject(row))
+						[{id:1,tablename:xxx,status:true,storage_type:hbase},
+						 {id:2,tablename:333,status:true,storage_type:BitMap},
+						 {id:3,tablename:555,status:true,storage_type:ElasticSearch}
+						 ]
+
+
+    JSONArray(JSONObject(row))	 To  Map
+    			    ---->[
+				        {tableName:xxx, tableInfo:{status:true,storage_type:hbase}},
+				        {tableName:333,tableInfo:{status:true,storage_type:BitMap}},
+				        {tableName:555,tableInfo:{status:true,storage_type:ElasticSearch}}
+				         ]
+
+
+
+
+endPoint
+	tableinfo
+		boolean status;
+		String	storage_type
+	Map<String,tableInfo> =====Map<表名,表设置信息>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	select tablename,columnName,type，Comments from IronDBTables,IronDBColumns where IronDBTables.id=IronDBColumns.IronDBTables_ID
+	----->JSONArray(JSONObject(Row))
+		[{tablename:xxx,columnName:id,type:int,Comments:ssss},
+		{tablename:xxx,columnName:name,type:String,Comments:xxxx}，
+		{tablename:xxx,columnName:sex,type:String}，
+		]
+
+    ------- {tableName:xxxx,tableInfo:{colu}}
+
+
+endPoint
+	Schema
+    	String  type
+    	String  name
+Map<String,SortedList<Schema>>  table_metaData   ===== cache   ------> Dispatcher(Driver)
+
