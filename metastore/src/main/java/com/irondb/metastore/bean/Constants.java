@@ -1,5 +1,4 @@
 package com.irondb.metastore.bean;
-
 import org.apache.hadoop.hbase.client.Durability;
 import org.apache.hadoop.hbase.io.compress.Compression.Algorithm;
 import org.apache.hadoop.hbase.io.encoding.DataBlockEncoding;
@@ -11,7 +10,7 @@ import org.apache.hadoop.hbase.io.encoding.DataBlockEncoding;
  * @version
  * 
  */
-class Constants {
+public class Constants {
 	public static final Durability DURABILITY = Durability.SKIP_WAL;
 
 	public static final DataBlockEncoding DATA_BLOCK_ENCODING = DataBlockEncoding.FAST_DIFF;
