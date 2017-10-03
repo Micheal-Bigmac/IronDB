@@ -1,4 +1,4 @@
-package com.irondb.metastore;
+package com.irondb.metastore.rpc.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBufAllocator;
@@ -18,19 +18,13 @@ import java.util.concurrent.ThreadFactory;
 /**
  * Created by Micheal on 2017/10/2.
  */
-public abstract class Server {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+public class IronDBMetastoreServer implements ServerChannel {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IronDBMetastoreServer.class);
     private EventLoopGroup boosGroup;
     private EventLoopGroup workerGroup;
     protected volatile ByteBufAllocator allocator;
-    private IronDBContext context;
     private static final int Task_Group = Runtime.getRuntime().availableProcessors(); //CPU Core
-
-    private int workers = 0;  // 工作组 数量 0 default  == cup*2
-    private ChannelHandler handler;
-
-    public abstract void configure();
-
+    private int workers = 0;  // 工作组 数量 0 default  = cup*2
 
     /***
      * FixedRecvByteBufAllocator：固定长度的接收缓冲区分配器，由它分配的ByteBuf长度都是固定大小的，并不会根据实际数据报的大小动态收缩。但是，如果容量不足，支持动态扩展。动态扩展是Netty ByteBuf的一项基本功能，与ByteBuf分配器的实现没有关系；
@@ -60,8 +54,7 @@ public abstract class Server {
      */
 
 //  TCP层面的接收和发送缓冲区大小设置  应ChannelOption的SO_SNDBUF和SO_RCVBUF，需要根据推送消息的大小，合理设置
-    public void start() {
-        configure();
+    public void start(final  String host,final int port,ChannelHandler handler) {
         LOGGER.info("启动netty服务器");
         ThreadFactory bossFactory = new DefaultThreadFactory("netty.accept.boss");
         ThreadFactory workFactory = new DefaultThreadFactory("netty.accept.work");
@@ -85,13 +78,13 @@ public abstract class Server {
             bootstarp.childHandler(handler);
         }
 
-        final boolean ssl = context.getBoolean("mqtt.ssl.enabled");
-        final String host = context.getString("mqtt.host");
-        final int port = ssl ? context.getInt("mqtt.ssl.port") : context.getInt("mqtt.port");
-        final int keepAliveMax = context.getInt("mqtt.keepalive.max", 50);
+//        final boolean ssl = context.getBoolean("mqtt.ssl.enabled");
+//        final String host = context.getString("mqtt.host");
+//        final int port = ssl ? context.getInt("mqtt.ssl.port") : context.getInt("mqtt.port");
+//        final int keepAliveMax = context.getInt("mqtt.keepalive.max", 50);
 
         try {
-            ChannelFuture future = bootstarp.bind(host, port).sync();
+            ChannelFuture future = bootstarp.bind(host,port).sync();
             LOGGER.info("服务启动成功");
             future.channel().closeFuture().sync(); // 阻塞等待
         } catch (InterruptedException e) {
@@ -99,7 +92,7 @@ public abstract class Server {
             e.printStackTrace();
         }
     }
-
+    @Override
     public void stop() {
         if (!boosGroup.isShutdown()) {
             boosGroup.shutdownGracefully();

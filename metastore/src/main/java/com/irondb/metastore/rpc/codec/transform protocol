@@ -1,0 +1,4 @@
+网络传输 按照 LengthFramer 或者 忘记 待定
+
+
+LengthFieldBasedFrameDecoder

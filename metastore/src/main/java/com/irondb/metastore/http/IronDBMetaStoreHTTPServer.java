@@ -1,14 +1,26 @@
 package com.irondb.metastore.http;
 
-import com.irondb.metastore.Server;
+import com.irondb.metastore.rpc.server.ServerChannel;
+import io.netty.channel.ChannelHandler;
 
 /**
  * Created by Micheal on 2017/10/2.
  */
-public class IronDBMetaStoreHTTPServer extends Server {
+
+/**
+ *  用户http service
+ */
+public class IronDBMetaStoreHTTPServer implements ServerChannel {
+
+
 
     @Override
-    public void configure() {
-        // 加载IronDb configure
+    public void start(final  String host,final int port,ChannelHandler handler) {
+
+    }
+
+    @Override
+    public void stop() {
+
     }
 }
