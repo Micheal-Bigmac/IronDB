@@ -1,2 +1,2 @@
 com.irondb.metastore.rpc.server.IronDBMetastoreTCPServer
-com.irondb.metastore.http.IronDBMetaStoreHTTPServer
+com.irondb.metastore.rpc.http.IronDBMetaStoreHTTPServer

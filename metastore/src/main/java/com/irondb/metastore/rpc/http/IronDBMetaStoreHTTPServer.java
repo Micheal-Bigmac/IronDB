@@ -1,4 +1,4 @@
-package com.irondb.metastore.http;
+package com.irondb.metastore.rpc.http;
 
 import com.irondb.metastore.rpc.server.ServerChannel;
 import io.netty.channel.ChannelHandler;

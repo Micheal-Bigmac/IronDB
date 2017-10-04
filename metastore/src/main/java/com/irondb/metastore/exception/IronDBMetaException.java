@@ -1,4 +1,4 @@
-package com.irondb.metastore.mysql;
+package com.irondb.metastore.exception;
 
 public class IronDBMetaException extends Exception {
     public IronDBMetaException() {

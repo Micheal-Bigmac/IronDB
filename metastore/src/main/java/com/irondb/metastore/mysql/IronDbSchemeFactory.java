@@ -3,6 +3,7 @@ package com.irondb.metastore.mysql;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.irondb.metastore.IronDBContext;
+import com.irondb.metastore.exception.IronDBMetaException;
 
 import java.io.BufferedReader;
 import java.io.File;

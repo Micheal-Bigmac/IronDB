@@ -1,4 +1,4 @@
-package com.irondb.metastore.http;
+package com.irondb.metastore.rpc.http;
 
 /**
  * Created by Micheal on 2017/10/2.
