@@ -4,6 +4,7 @@ import com.irondb.metastore.rpc.api.MessageHandlerAdapter;
 import com.irondb.metastore.rpc.serialization.Serializer;
 import com.irondb.metastore.rpc.transport.RpcRequest;
 import com.irondb.metastore.rpc.transport.RpcResponse;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +17,10 @@ import java.lang.reflect.Method;
  */
 public class ServerMessageHandler extends MessageHandlerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(ServerMessageHandler.class);
-
     private Serializer serializer;
-    private ChannelHandlerContext context;
 
     @Override
-    public void receiveAndProcessor(byte[] request) {
+    public void receiveAndProcessor(byte[] request, Channel channel) {
         RpcRequest deRequst = serializer.deserializer(request, RpcRequest.class);
         RpcResponse response = new RpcResponse();
         response.setRequestId(deRequst.getRequestId());
@@ -51,6 +50,6 @@ public class ServerMessageHandler extends MessageHandlerAdapter {
             logger.error("InvocationTarget Exception " + e.getMessage());
             response.setError(e);
         }
-        context.writeAndFlush(response);
+        channel.writeAndFlush(response);
     }
 }

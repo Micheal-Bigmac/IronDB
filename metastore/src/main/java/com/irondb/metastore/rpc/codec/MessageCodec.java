@@ -16,7 +16,7 @@ import java.util.List;
  * 可能存在粘包问题
  */
 
-public class MessageCodec extends ByteToMessageCodec<RpcRequest>{
+public class MessageCodec extends ByteToMessageCodec<RpcResponse> {
     private static final int Message_Length = 4;// encode 写入时 写入一个int 类型数据 4个字节
     private static final Logger logger = LoggerFactory.getLogger(MessageCodec.class);
     private Serializer serializer;
@@ -26,13 +26,12 @@ public class MessageCodec extends ByteToMessageCodec<RpcRequest>{
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, RpcRequest msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, RpcResponse msg, ByteBuf out) throws Exception {
         byte[] serializer1 = serializer.serializer(msg);
         out.writeInt(serializer1.length);
         out.writeBytes(serializer1);
     }
 
-    @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         int length = in.readableBytes();
         if (length < Message_Length) return;
@@ -42,11 +41,10 @@ public class MessageCodec extends ByteToMessageCodec<RpcRequest>{
 
         if (in.readableBytes() < MessageLength) {
             in.resetReaderIndex();
-        }else{
-            byte[] body=new byte[MessageLength];
+        } else {
+            byte[] body = new byte[MessageLength];
             in.readBytes(body);
-            RpcResponse deserializer = serializer.deserializer(body, RpcResponse.class);
-            out.add(deserializer);
+            out.add(body);
         }
     }
 }

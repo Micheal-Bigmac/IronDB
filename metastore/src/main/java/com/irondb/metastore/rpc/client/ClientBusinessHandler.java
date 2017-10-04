@@ -4,6 +4,7 @@ import com.irondb.metastore.rpc.api.MessageHandlerAdapter;
 import com.irondb.metastore.rpc.serialization.Serializer;
 import com.irondb.metastore.rpc.transport.RpcRequest;
 import com.irondb.metastore.rpc.transport.RpcResponse;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -27,7 +28,7 @@ public class ClientBusinessHandler extends MessageHandlerAdapter {
     private Map<Long, BlockingQueue<RpcResponse>> callback;
 
     @Override
-    public void receiveAndProcessor(byte[] request) {
+    public void receiveAndProcessor(byte[] request,Channel channel) {
         RpcResponse deReponse = serializer.deserializer(request, RpcResponse.class);
         if (deReponse != null && deReponse.getRequestId() > 0) {
             BlockingQueue<RpcResponse> rpcResponses = callback.get(deReponse.getRequestId());
@@ -42,7 +43,7 @@ public class ClientBusinessHandler extends MessageHandlerAdapter {
 
     // 客户端阻塞等待结果返回   逻辑暂时未明白 未走通
     @Override
-    public Object sendAndProcessor(RpcRequest rpcRequest) throws InterruptedException {
+    public Object sendAndProcessor(RpcRequest rpcRequest,Channel channel) throws InterruptedException {
         byte[] serializer1 = serializer.serializer(rpcRequest);
 
         BlockingQueue<RpcResponse> queue = new LinkedBlockingDeque<>(); // client 阻塞方式应该用 BlockQueue

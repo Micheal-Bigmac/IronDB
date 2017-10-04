@@ -22,5 +22,6 @@ public class ServerBusinessChannelHandler extends SimpleChannelInboundHandler<by
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, byte[] msg) throws Exception {
         logger.info("ServiceBusinessChannelHandler start deal message");
+        executorService.execute(()->messageHandler.receiveAndProcessor(msg,ctx.channel()));
     }
 }
