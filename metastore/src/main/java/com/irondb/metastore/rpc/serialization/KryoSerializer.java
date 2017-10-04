@@ -34,6 +34,7 @@ public class KryoSerializer  implements Serializer{
         ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(data);
         Input input =new Input(byteArrayInputStream);
         return (T) kryo.readClassAndObject(input);
+
     }
 
 }

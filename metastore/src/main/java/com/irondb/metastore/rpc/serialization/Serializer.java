@@ -5,7 +5,6 @@ package com.irondb.metastore.rpc.serialization;
  */
 
 public interface Serializer {
-
    <T> byte[] serializer(T obj);
     <T> T deserializer(byte[] data ,Class<T> clazz);
 }

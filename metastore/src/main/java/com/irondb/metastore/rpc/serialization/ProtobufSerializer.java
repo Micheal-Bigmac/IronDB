@@ -15,8 +15,6 @@ public class ProtobufSerializer implements Serializer {
     private static final Logger logger = LoggerFactory.getLogger(ProtobufSerializer.class);
     @Override
     public <T> byte[] serializer(T obj) {
-
-
         Class<T> clazz = (Class<T>) obj.getClass();
         LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
         try {

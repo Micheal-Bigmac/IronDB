@@ -11,7 +11,6 @@ public class FastjsonSerializer implements Serializer {
     @Override
     public <T> byte[] serializer(T obj) {
         return JSON.toJSONBytes(obj, SerializerFeature.SortField);
-
     }
     @Override
     public <T> T deserializer(byte[] data, Class<T> clazz) {
