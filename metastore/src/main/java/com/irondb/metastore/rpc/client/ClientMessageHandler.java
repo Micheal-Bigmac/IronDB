@@ -1,5 +1,6 @@
 package com.irondb.metastore.rpc.client;
 
+import com.google.common.collect.Maps;
 import com.irondb.metastore.rpc.api.MessageHandlerAdapter;
 import com.irondb.metastore.rpc.serialization.Serializer;
 import com.irondb.metastore.rpc.transport.RpcRequest;
@@ -20,12 +21,15 @@ import java.util.concurrent.TimeUnit;
  * Created by Micheal on 2017/10/4.
  */
 
-public class ClientBusinessHandler extends MessageHandlerAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(ClientBusinessHandler.class);
+public class ClientMessageHandler extends MessageHandlerAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(ClientMessageHandler.class);
     private static final int TIME_AWAIT = 30;
     private Serializer serializer;
-    private ChannelHandlerContext context;
     private Map<Long, BlockingQueue<RpcResponse>> callback;
+
+    public ClientMessageHandler() {
+        callback= Maps.newConcurrentMap();
+    }
 
     @Override
     public void receiveAndProcessor(byte[] request,Channel channel) {
@@ -34,7 +38,6 @@ public class ClientBusinessHandler extends MessageHandlerAdapter {
             BlockingQueue<RpcResponse> rpcResponses = callback.get(deReponse.getRequestId());
             rpcResponses.add(deReponse);
             System.out.println(deReponse.toString());
-
             callback.remove(deReponse.getRequestId());
         } else {
             logger.error("not found RequestId");
@@ -49,11 +52,11 @@ public class ClientBusinessHandler extends MessageHandlerAdapter {
         BlockingQueue<RpcResponse> queue = new LinkedBlockingDeque<>(); // client 阻塞方式应该用 BlockQueue
         callback.put(rpcRequest.getRequestId(), queue);
 
-       context.writeAndFlush(serializer1).addListener(new ChannelFutureListener() {
+       channel.writeAndFlush(serializer1).addListener(new ChannelFutureListener() {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
                 if (future.isSuccess()) {
-                    context.read();
+                    channel.read();
                     logger.debug("Message succeed: Message {}  has been sent to client successfully", rpcRequest.getRequestId());
                 } else {
                     logger.debug("Message failed: Message {} {} has been sent to clientsuccessfully", rpcRequest.toString(), future.cause());
