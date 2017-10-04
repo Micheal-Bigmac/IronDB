@@ -5,6 +5,7 @@ import com.irondb.metastore.rpc.protocol.Protocol;
 import com.irondb.metastore.rpc.serializer.Serializer;
 
 import javax.net.ssl.SSLException;
+import java.util.ServiceLoader;
 
 /**
  * Created by Micheal on 2017/10/3.
@@ -28,9 +29,10 @@ public final class IronDbMetastoreServerBuilder {
     }
 
     public IronDBMetastoreServer build() {
-        IronDbMetastoreServerChannelHandler ironDbMetastoreTCPChannelHandler = null;
+        serializer = ServiceLoader.load(Serializer.class).iterator().next();
+        IronDbMetastoreServerChannelInitialzer ironDbMetastoreTCPChannelHandler = null;
         try {
-            ironDbMetastoreTCPChannelHandler = new IronDbMetastoreServerChannelHandler(context);
+            ironDbMetastoreTCPChannelHandler = new IronDbMetastoreServerChannelInitialzer(context,serializer);
         } catch (SSLException e) {
             e.printStackTrace();
         }

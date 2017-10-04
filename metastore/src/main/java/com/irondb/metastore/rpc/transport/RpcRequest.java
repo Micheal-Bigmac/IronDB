@@ -1,6 +1,7 @@
 package com.irondb.metastore.rpc.transport;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Created by Micheal on 2017/10/3.
@@ -59,5 +60,17 @@ public class RpcRequest implements Serializable {
 
     public void setParamters(Object[] paramters) {
         this.paramters = paramters;
+    }
+
+    @Override
+    public String toString() {
+        return "RpcRequest{" +
+                "requestId=" + requestId +
+                ", className='" + className + '\'' +
+                ", methodName='" + methodName + '\'' +
+                ", version='" + version + '\'' +
+                ", paramterType=" + Arrays.toString(paramterType) +
+                ", paramters=" + Arrays.toString(paramters) +
+                '}';
     }
 }

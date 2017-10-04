@@ -1,5 +1,8 @@
 package com.irondb.metastore.rpc.codec;
 
+import com.irondb.metastore.rpc.serializer.Serializer;
+import com.irondb.metastore.rpc.transport.RpcRequest;
+import com.irondb.metastore.rpc.transport.RpcResponse;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
@@ -13,15 +16,20 @@ import java.util.List;
  * 可能存在粘包问题
  */
 
-public class MessageCodec extends ByteToMessageCodec<byte[]> {
+public class MessageCodec extends ByteToMessageCodec<RpcRequest>{
     private static final int Message_Length = 4;// encode 写入时 写入一个int 类型数据 4个字节
     private static final Logger logger = LoggerFactory.getLogger(MessageCodec.class);
+    private Serializer serializer;
+
+    public MessageCodec(Serializer serializer) {
+        this.serializer = serializer;
+    }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, byte[] msg, ByteBuf out) throws Exception {
-        int dataLength = msg.length;
-        out.writeInt(dataLength);
-        out.writeBytes(msg);
+    protected void encode(ChannelHandlerContext ctx, RpcRequest msg, ByteBuf out) throws Exception {
+        byte[] serializer1 = serializer.serializer(msg);
+        out.writeInt(serializer1.length);
+        out.writeBytes(serializer1);
     }
 
     @Override
@@ -37,8 +45,8 @@ public class MessageCodec extends ByteToMessageCodec<byte[]> {
         }else{
             byte[] body=new byte[MessageLength];
             in.readBytes(body);
-            out.add(body);
+            RpcResponse deserializer = serializer.deserializer(body, RpcResponse.class);
+            out.add(deserializer);
         }
-
     }
 }
