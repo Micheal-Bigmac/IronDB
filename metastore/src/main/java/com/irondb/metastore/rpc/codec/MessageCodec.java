@@ -1,6 +1,6 @@
 package com.irondb.metastore.rpc.codec;
 
-import com.irondb.metastore.rpc.serializer.Serializer;
+import com.irondb.metastore.rpc.serialization.Serializer;
 import com.irondb.metastore.rpc.transport.RpcRequest;
 import com.irondb.metastore.rpc.transport.RpcResponse;
 import io.netty.buffer.ByteBuf;

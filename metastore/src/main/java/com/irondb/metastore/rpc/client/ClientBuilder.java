@@ -2,7 +2,7 @@ package com.irondb.metastore.rpc.client;
 
 import com.irondb.metastore.IronDBContext;
 import com.irondb.metastore.rpc.protocol.Protocol;
-import com.irondb.metastore.rpc.serializer.Serializer;
+import com.irondb.metastore.rpc.serialization.Serializer;
 import com.irondb.metastore.rpc.server.ServerChannel;
 
 import javax.net.ssl.SSLException;

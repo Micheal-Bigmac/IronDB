@@ -1,5 +1,6 @@
 package com.irondb.metastore.rpc.serializer;
 
+import com.irondb.metastore.rpc.serialization.Serializer;
 import org.junit.Test;
 
 import java.util.ServiceLoader;

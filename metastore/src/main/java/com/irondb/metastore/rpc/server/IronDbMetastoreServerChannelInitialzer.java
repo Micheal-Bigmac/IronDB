@@ -4,7 +4,7 @@ package com.irondb.metastore.rpc.server;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.irondb.metastore.IronDBContext;
 import com.irondb.metastore.rpc.codec.MessageCodec;
-import com.irondb.metastore.rpc.serializer.Serializer;
+import com.irondb.metastore.rpc.serialization.Serializer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.DefaultEventLoopGroup;

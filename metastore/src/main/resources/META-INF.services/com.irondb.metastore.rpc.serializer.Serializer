@@ -1,3 +1,3 @@
-com.irondb.metastore.rpc.serializer.FastjsonSerializer
-com.irondb.metastore.rpc.serializer.KryoSerializer
-com.irondb.metastore.rpc.serializer.ProtobufSerializer
+com.irondb.metastore.rpc.serialization.FastjsonSerializer
+com.irondb.metastore.rpc.serialization.KryoSerializer
+com.irondb.metastore.rpc.serialization.ProtobufSerializer
