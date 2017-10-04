@@ -1,6 +1,5 @@
 package com.irondb.metastore.rpc.server;
 
-import com.irondb.metastore.rpc.api.MessageHandler;
 import com.irondb.metastore.rpc.api.MessageHandlerAdapter;
 import com.irondb.metastore.rpc.serializer.Serializer;
 import com.irondb.metastore.rpc.transport.RpcRequest;

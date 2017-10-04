@@ -1,6 +1,9 @@
 package com.irondb.metastore.util;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
 /**
  * Created by Micheal on 2017/9/23.

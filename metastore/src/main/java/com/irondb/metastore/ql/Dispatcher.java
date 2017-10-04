@@ -1,10 +1,10 @@
 package com.irondb.metastore.ql;
 
-import com.irondb.metastore.executor.DQLExecutor;
-import com.irondb.metastore.executor.SqlTask;
 import com.irondb.metastore.IronDBContext;
 import com.irondb.metastore.bean.TableInfo;
 import com.irondb.metastore.bean.TableSchema;
+import com.irondb.metastore.executor.DQLExecutor;
+import com.irondb.metastore.executor.SqlTask;
 import com.irondb.metastore.mysql.ConnectionFactory;
 import com.irondb.metastore.mysql.IronDBMetaDataCache;
 import com.irondb.metastore.mysql.IronDbSchemeFactory;
@@ -13,11 +13,9 @@ import com.irondb.metastore.util.JSONToMap;
 import com.irondb.metastore.util.TokenUtil;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
-import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.alter.Alter;
 import net.sf.jsqlparser.statement.create.index.CreateIndex;
-import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
 import net.sf.jsqlparser.statement.create.view.AlterView;
 import net.sf.jsqlparser.statement.create.view.CreateView;

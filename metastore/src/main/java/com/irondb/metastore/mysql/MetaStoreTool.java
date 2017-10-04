@@ -6,7 +6,8 @@ import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -120,7 +121,7 @@ public class MetaStoreTool {
     public void doInit() throws IronDBMetaException {
         testConnectionToMetastore();
 
-        String initScriptFile = IronDBContext.getMetaStoreScript();
+        String initScriptFile = com.irondb.metastore.IronDBContext.getMetaStoreScript();
 
         try {
             System.out.println("Initialization script " + initScriptFile);

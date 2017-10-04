@@ -6,7 +6,6 @@ import com.irondb.metastore.rpc.serializer.Serializer;
 import com.irondb.metastore.rpc.server.ServerChannel;
 
 import javax.net.ssl.SSLException;
-import java.io.Serializable;
 import java.util.ServiceLoader;
 
 /**

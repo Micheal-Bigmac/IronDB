@@ -4,7 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.irondb.metastore.bean.TableInfo;
 import com.irondb.metastore.bean.TableSchema;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class JSONToMap {
     public static Map<String, TableInfo> StringToMapForTableInfo(String param) {
