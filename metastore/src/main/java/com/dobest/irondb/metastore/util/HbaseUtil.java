@@ -1,7 +1,7 @@
-package com.irondb.metastore.util;
+package com.dobest.irondb.metastore.util;
 
 import com.irondb.metastore.IronDBContext;
-import com.irondb.metastore.bean.Constants;
+import com.dobest.irondb.metastore.bean.Constants;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;

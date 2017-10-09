@@ -1,6 +1,6 @@
-package com.irondb.metastore.http;
+package com.dobest.irondb.metastore.http;
 
-import com.irondb.metastore.Server;
+import com.dobest.irondb.metastore.Server;
 
 /**
  * Created by Micheal on 2017/10/2.

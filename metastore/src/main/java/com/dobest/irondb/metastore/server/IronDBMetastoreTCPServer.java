@@ -1,6 +1,6 @@
-package com.irondb.metastore.server;
+package com.dobest.irondb.metastore.server;
 
-import com.irondb.metastore.Server;
+import com.dobest.irondb.metastore.Server;
 
 public class IronDBMetastoreTCPServer extends Server{
 

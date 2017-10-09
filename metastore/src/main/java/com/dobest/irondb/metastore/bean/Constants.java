@@ -1,4 +1,4 @@
-package com.irondb.metastore.bean;
+package com.dobest.irondb.metastore.bean;
 import org.apache.hadoop.hbase.client.Durability;
 import org.apache.hadoop.hbase.io.compress.Compression.Algorithm;
 import org.apache.hadoop.hbase.io.encoding.DataBlockEncoding;
