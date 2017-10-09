@@ -16,7 +16,8 @@ public enum  SqlType {
     DELETE(4),
     ALTER(5),
     DESC(6),
-    NONE(7);
+    LOAD(7),
+    NONE(8);
 
     private final int value;
     SqlType(int i) {

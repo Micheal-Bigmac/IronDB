@@ -1,6 +1,6 @@
 package com.dobest.irondb.metastore.util;
 
-import com.irondb.metastore.IronDBContext;
+import com.dobest.irondb.metastore.IronDBContext;
 import com.dobest.irondb.metastore.bean.Constants;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;

@@ -1,7 +1,7 @@
 package com.dobest.irondb.metastore.server;
 
 
-import com.irondb.metastore.IronDBContext;
+import com.dobest.irondb.metastore.IronDBContext;
 import io.netty.channel.*;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.ssl.SslContext;
@@ -22,7 +22,7 @@ import java.io.File;
 public class IronDbMetastoreTCPChannelHandler extends ChannelInitializer<SocketChannel> {
 
     private final boolean ssl;
-    private static SslContext sslContext=null;
+    private static SslContext sslContext;
     private final int keepAlive;
 
     public IronDbMetastoreTCPChannelHandler(IronDBContext context) throws SSLException {
