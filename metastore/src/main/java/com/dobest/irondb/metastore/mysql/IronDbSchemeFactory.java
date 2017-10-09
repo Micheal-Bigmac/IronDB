@@ -15,8 +15,8 @@ import java.util.IllegalFormatException;
 import java.util.List;
 
 
-/***
- *  该类 是个工厂类 根据不同的 外部存储 产生对应的 connection  同时把文件中多行同属于一条Sql 转换成 一行一条SQL
+/**
+ * 该类 是个工厂类 根据不同的 外部存储 产生对应的 connection  同时把文件中多行同属于一条Sql 转换成 一行一条SQL
  */
 public class IronDbSchemeFactory {
     public static final String DB_DERBY = "derby";
@@ -26,13 +26,13 @@ public class IronDbSchemeFactory {
     public static final String DB_POSTGRACE = "postgres";
     public static final String DB_ORACLE = "oracle";
 
-    /***
+    /**
      * Get JDBC connection to metastore db
      *
-     * @param userName metastore connection username
-     * @param password metastore connection password
+     * @param userName  metastore connection username
+     * @param password  metastore connection password
      * @param printInfo print connection parameters
-     * @param conf hive config object
+     * @param conf      hive config object
      * @return metastore connection object
      */
     public static Connection getConnectionToMetastore(String userName,
@@ -150,10 +150,9 @@ public class IronDbSchemeFactory {
                 throws IllegalFormatException, IOException;
     }
 
-    /***
+    /**
      * Base implementation of NestedScriptParser
      * abstractCommandParser.
-     *
      */
     private static abstract class AbstractCommandParser implements NestedScriptParser {
         private List<String> dbOpts;
@@ -545,10 +544,10 @@ public class IronDbSchemeFactory {
         }
 
         public MetaStoreConnectionInfo(
-                                       boolean printInfo, IronDBContext ctx, String dbType) {
+                boolean printInfo, IronDBContext ctx, String dbType) {
             super();
             maxSize = Integer.valueOf(ctx.get("IronDb.metastore.mysql.maxSize"));
-            initSize =Integer.valueOf(ctx.get("IronDb.metastore.mysql.initSize"));
+            initSize = Integer.valueOf(ctx.get("IronDb.metastore.mysql.initSize"));
             this.userName = ctx.get("IronDb.metastore.mysql.username");
             this.password = ctx.get("IronDb.metastore.mysql.passwd");
             this.url = ctx.get("IronDb.metastore.mysql.uri");
