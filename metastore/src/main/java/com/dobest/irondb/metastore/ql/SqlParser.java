@@ -1,8 +1,10 @@
 package com.dobest.irondb.metastore.ql;
 
+import com.alibaba.fastjson.JSON;
 import com.dobest.irondb.metastore.bean.TableInfo;
 import com.dobest.irondb.metastore.bean.TableSchema;
 import com.dobest.irondb.metastore.mysql.IronDBMetaDataCache;
+import com.dobest.irondb.metastore.util.GenericID;
 import com.sun.deploy.util.StringUtils;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
@@ -18,7 +20,7 @@ import java.util.Map;
 public class SqlParser {
     private static final String IronDBTablesName = "IronDBTables";
     private static final String IronDBColumnsMames = "IronDBColumns";
-    private static final String addTableSqls = "insert into IronDBTables (id,tablename,status,storage_Type) values(";
+    private static final String addTableSqls = "insert into IronDBTables (id,tablename,status,storage_Type,table_options) values(";
     private static final String addTableColumnSqls = "insert into IronDBColumns (column_name,type,irondb_id,suppor_function) values (";
 
     private static final String dropTableSqls="delete from IronDBTables where id=";
@@ -40,23 +42,25 @@ public class SqlParser {
 
         tableInfo.setTablename(tableName);
         tableInfo.setStatus(true);
-//        long primaryKey = GenericID.nextId();
-        long primaryKey = 2;
+        long primaryKey = GenericID.nextId();
+//        long primaryKey = 2;
         tableInfo.setId(primaryKey);
         // 往内存中添加表相关缓存数据
 
 
-//        Map<String, TableInfo> tables = dbCache.getTables();
-//        if(!tables.containsKey(tableName)){
-//            tables.put(tableName,tableInfo);
-//            dbCache.getTable_metaData().put(tableName,tableSchemas);
-//        }else {
-//            return null;
-//        }
+        Map<String, TableInfo> tables = dbCache.getTables();
+        if(!tables.containsKey(tableName)){
+            tables.put(tableName,tableInfo);
+            dbCache.getTable_metaData().put(tableName,tableSchemas);
+        }else {
+            return null;
+        }
 
 
         List<String> tableOptionsStrings = (List<String>) ((CreateTable) parse).getTableOptionsStrings();
         Map<String, Object> tableOptionsMap = paraseTableOptions(tableOptionsStrings);
+
+        tableInfo.setTableOptionsMap(tableOptionsMap);
 
         if (tableOptionsMap.containsKey("primary_key")) {
             tableInfo.setStorage_type("detail");
@@ -103,11 +107,16 @@ public class SqlParser {
         buffer = new StringBuffer();
         buffer.append(addTableSqls).append(ob.getId()).append(",'").append(ob.getTablename()).append("',").append(1);
         if(ob.getStorage_type()!=null){
-            buffer.append(",'").append(ob.getStorage_type()).append("')");
+            buffer.append(",'").append(ob.getStorage_type()).append("',");
         }else{
-            buffer.append(",'").append("").append("')");
+            buffer.append(",'").append("").append("',");
         }
 
+        if(ob.getTableOptionsMap().size()>0){
+            buffer.append("'").append(ob.getTable_options()).append("')");
+        }else{
+            buffer.append("'").append("").append("')");
+        }
 
         sqls.add(buffer.toString());
 

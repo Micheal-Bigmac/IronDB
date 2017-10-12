@@ -13,10 +13,12 @@ import java.sql.Connection;
  */
 public class TestConnectPool {
     public static void main(String[] args) throws IOException {
-      URL resource1 = TestConnectPool.class.getResource("/IronDB.properties");
-        IronDBContext ctx = IronDBContext.fromInputStream(resource1.openStream());
+//      URL resource1 = TestConnectPool.class.getResource("/IronDB.properties");
+//        IronDBContext ctx = IronDBContext.fromInputStream(resource1.openStream());
 
-        IronDbSchemeFactory.MetaStoreConnectionInfo connectionInfo = new IronDbSchemeFactory.MetaStoreConnectionInfo(true, ctx, IronDbSchemeFactory.DB_MYSQL);
+//        IronDBContext ironDBContext = IronDBContext.fromInputStream("/IronDB.properties");
+//        System.out.println(IronDBContext.get("IronDb.metastore.mysql.initSize"));
+       /* IronDbSchemeFactory.MetaStoreConnectionInfo connectionInfo = new IronDbSchemeFactory.MetaStoreConnectionInfo(true, ctx, IronDbSchemeFactory.DB_MYSQL);
 
         GenericObjectPoolConfig conf = new GenericObjectPoolConfig();
         conf.setMaxTotal(10);
@@ -32,7 +34,7 @@ public class TestConnectPool {
                 e.printStackTrace();
             }
         }
-
+*/
     }
 
 }

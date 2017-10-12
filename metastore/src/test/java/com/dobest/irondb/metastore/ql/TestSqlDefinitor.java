@@ -1,5 +1,7 @@
 package com.dobest.irondb.metastore.ql;
 
+import com.alibaba.fastjson.JSON;
+import com.dobest.irondb.metastore.bean.TableInfo;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParser;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -60,5 +62,14 @@ public class TestSqlDefinitor {
         while(matcher.find()){
             System.out.println(matcher.group(1));
         }
+    }
+
+
+    @Test
+    public  void test4(){
+        String sql="{\"storage_type\":\"detail\",\"table_options\":\"{\\\"primary_key\\\":\\\"(uid,name)\\\",\\\"ttl\\\":\\\"86400\\\"}\",\"id\":\"1507705015441000\",\"tablename\":\"user_image8\",\"status\":\"1\"}";
+        TableInfo transFormResult = JSON.parseObject(sql,TableInfo.class);
+
+        System.out.println(transFormResult.getTable_options());
     }
 }

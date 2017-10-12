@@ -7,9 +7,10 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+//import org.apache.hadoop.hbase.client.Admin;
+//import org.apache.hadoop.hbase.client.Connection;
+//import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.regionserver.BloomType;
 import org.apache.hadoop.hbase.util.Bytes;
 
@@ -22,22 +23,22 @@ import java.util.List;
 public class HbaseUtil {
 
     public static Configuration conf;
-    private static Admin hAdmin;
+    private static HBaseAdmin hAdmin;
 
-    public static Connection connection;
+//    public static Connection connection;
 
-    public void HbaseUtil(IronDBContext context) {
+     static {
         conf = HBaseConfiguration.create();
-        conf.set("hbase.zookeeper.quorum", context.get("hbase.zookeeper.quorum"));
+         String s = IronDBContext.get("hbase.zookeeper.quorum");
+         conf.set("hbase.zookeeper.quorum",s);
         try {
-            connection = ConnectionFactory.createConnection(conf);
-            hAdmin = connection.getAdmin();
+            hAdmin = new HBaseAdmin(conf);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean dropTable(String tableName) {
+    public static boolean dropTable(String tableName) {
         TableName tName = TableName.valueOf(tableName);
         try {
             if (hAdmin.tableExists(tName)) {
@@ -51,7 +52,7 @@ public class HbaseUtil {
         return false;
     }
 
-    public boolean createTable(HTableDescriptor httt, TableName tName) throws IOException {
+    public static boolean createTable(HTableDescriptor httt, TableName tName) throws IOException {
         if (hAdmin.tableExists(tName)) {
             return false;
         }
@@ -68,7 +69,7 @@ public class HbaseUtil {
         return true;
     }
 
-    private byte[][] partitionAlgrothrim(int num, int rowKeyLength) {
+    private static byte[][] partitionAlgrothrim(int num, int rowKeyLength) {
         if (num <= 0) return null;
         byte[][] splitKeys = new byte[num][];
         int offset = getOffset(rowKeyLength);
@@ -80,7 +81,7 @@ public class HbaseUtil {
         return splitKeys;
     }
 
-    private int getOffset(int rowKeyLength) {
+    private static int getOffset(int rowKeyLength) {
         int i = 0;
         while (rowKeyLength / 2 != 0) {
             i++;
@@ -89,8 +90,7 @@ public class HbaseUtil {
         return i;
     }
 
-    public boolean createHbaseTable(String table, List<String> Familys, int partitionNum, int rowkeyLength) {
-
+    public static boolean createHbaseTable(String table, List<String> Familys, int partitionNum, int rowkeyLength) {
         byte[][] splits = partitionAlgrothrim(partitionNum, rowkeyLength);
         HTableDescriptor hTableDescriptor = new HTableDescriptor(TableName.valueOf(table));
         for (String columnFamily : Familys) {

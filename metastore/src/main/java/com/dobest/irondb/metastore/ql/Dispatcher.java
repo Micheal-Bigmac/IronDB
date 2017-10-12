@@ -1,5 +1,6 @@
 package com.dobest.irondb.metastore.ql;
 
+import com.alibaba.fastjson.JSON;
 import com.dobest.irondb.metastore.IronDBContext;
 import com.dobest.irondb.metastore.bean.TableInfo;
 import com.dobest.irondb.metastore.executor.MysqlTakMonitor;
@@ -34,6 +35,7 @@ import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.statement.upsert.Upsert;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.util.*;
@@ -60,7 +62,7 @@ public class Dispatcher {
     private synchronized void initTableMetaData() {
         // 获取IronDb 表的信息
         List<String> tables = new ArrayList<>();
-        String tablesInfo = "SELECT id, tablename, status, storage_type FROM irondbtables";
+        String tablesInfo = "SELECT id, tablename, status, storage_type,table_options FROM irondbtables";
         tables.add(tablesInfo);
 
         SqlTask tablesInfoTask = new SqlTask(tables);
@@ -192,7 +194,7 @@ public class Dispatcher {
 
 
     public static void main(String[] args) {
-        String sql2 = "create table user_image(uid LONG max,name INT  bitmap,birthday Date,first_logintime long,province array auto_dimension,love_game map auto_dimension) PRIMARY_KEY(uid,name) TTL 86400;";
+        String sql2 = "create table user_image8(uid LONG max,name INT  bitmap,birthday Date,first_logintime long,province array auto_dimension,love_game map auto_dimension) PRIMARY_KEY(uid,name) TTL 86400;";
 //        String sql3="drop table user_image";
 //        String sql3="TRUNCATE TABLE table_name;";
         String sql3="load data into table override inpath /root/path";
@@ -200,5 +202,7 @@ public class Dispatcher {
         Dispatcher dispatcher = new Dispatcher(ironDBContext);
         dispatcher.parseSql(sql2);
     }
+
+
 
 }

@@ -1,8 +1,6 @@
 package com.dobest.irondb.metastore;
 
 
-import com.google.common.collect.Maps;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -10,11 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.google.common.collect.Maps;
+
 public class IronDBContext {
-    private static Map<String, String> parameters;
+    private Map<String, String> parameters;
+    private static IronDBContext context;
 
     public IronDBContext() {
         parameters = Collections.synchronizedMap(new HashMap<String, String>());
+        context=this;
     }
 
     public IronDBContext(Map<String, String> paramters) {
@@ -23,11 +25,11 @@ public class IronDBContext {
     }
 
     public static String getMetaStoreScript() {
-        return parameters.get("IronDb.metastore.initSql.script");
+        return get("IronDb.metastore.initSql.script");
     }
 
     public static String getUrl() {
-        return parameters.get("IronDb.metastore.mysql.uri");
+        return get("IronDb.metastore.mysql.uri");
     }
 
     public void putAll(Map<String, String> map) {
@@ -44,36 +46,64 @@ public class IronDBContext {
         return new IronDBContext(Maps.fromProperties(properties));
     }
 
-    public String get(String key) {
-        return this.parameters.get(key);
+    public static IronDBContext fromInputStream() {
+        Properties properties = new Properties();
+        InputStream resAsStream=null;
+        try {
+            resAsStream= IronDBContext.class.getResourceAsStream("/IronDB.properties");
+            properties.load(resAsStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if(resAsStream!=null) {
+                try {
+                    resAsStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return new IronDBContext(Maps.fromProperties(properties));
+    }
+
+    public static String get(String key) {
+        return context.parameters.get(key);
     }
 
 
-    public void put(String key, String value) {
-        parameters.put(key, value);
+    public  static void put(String key, String value) {
+        context.parameters.put(key, value);
     }
 
 
-    public boolean containsKey(String key) {
-        return parameters.containsKey(key);
+    public static  boolean containsKey(String key) {
+        return context.parameters.containsKey(key);
     }
 
 
-    public Boolean getBoolean(String key, Boolean defaultValue) {
-        String value = get(key);
+    public  static Boolean getBoolean(String key, Boolean defaultValue) {
+        String value =  context.parameters.get(key);
         if (value != null) {
             return Boolean.parseBoolean(value.trim());
         }
         return defaultValue;
     }
 
-    public Boolean getBoolean(String key) {
+    public  static Boolean getBoolean(String key) {
         return getBoolean(key, null);
     }
 
 
 
-    public Integer getInteger(String key, Integer defaultValue) {
+    public  static Integer getInteger(String key, Integer defaultValue) {
+        String value =  context.parameters.get(key);
+        if (value != null) {
+            return Integer.parseInt(value.trim());
+        }
+        return defaultValue;
+    }
+
+    public static  int getInt(String key, int defaultValue) {
         String value = get(key);
         if (value != null) {
             return Integer.parseInt(value.trim());
@@ -81,15 +111,7 @@ public class IronDBContext {
         return defaultValue;
     }
 
-    public int getInt(String key, int defaultValue) {
-        String value = get(key);
-        if (value != null) {
-            return Integer.parseInt(value.trim());
-        }
-        return defaultValue;
-    }
-
-    public int getInt(String key) {
+    public static  int getInt(String key) {
         String value = get(key);
         if (value != null) {
             return Integer.parseInt(value.trim());
@@ -98,36 +120,35 @@ public class IronDBContext {
     }
 
 
-    public Integer getInteger(String key) {
+    public  Integer getInteger(String key) {
         return getInteger(key, null);
     }
 
-    public Long getLong(String key, Long defaultValue) {
-        String value = get(key);
+    public  Long getLong(String key, Long defaultValue) {
+        String value =  context.parameters.get(key);
         if (value != null) {
             return Long.parseLong(value.trim());
         }
         return defaultValue;
     }
 
-    public Long getLong(String key) {
+    public  Long getLong(String key) {
         return getLong(key, null);
     }
 
-    public String getString(String key, String defaultValue) {
-        return get(key, defaultValue);
+//    public  String getString(String key, String defaultValue) {
+//        return get(key, defaultValue);
+//    }
+
+    public static  String getString(String key) {
+        return context.parameters.get(key);
     }
 
-    public String getString(String key) {
-        return get(key);
-    }
-
-    private String get(String key, String defaultValue) {
-        String result = parameters.get(key);
+    private  String get(String key, String defaultValue) {
+        String result =  context.parameters.get(key);
         if (result != null) {
             return result;
         }
         return defaultValue;
     }
-
 }

@@ -12,6 +12,7 @@ import org.elasticsearch.action.admin.indices.mapping.delete.DeleteMappingRespon
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.Requests;
@@ -19,9 +20,13 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -33,6 +38,7 @@ public class ElasticSearchUtil {
     private static Client client = null;
     private static IndicesAdminClient adminClient;
     private static final String host = "10.241.95.218";
+//    private static final String host = "10.191.73.218";
 
     private static Client getClient() throws UnknownHostException {
         Settings settings = ImmutableSettings.settingsBuilder().put("cluster.name", "elasticsearch").build();
@@ -96,8 +102,14 @@ public class ElasticSearchUtil {
         return createIndexResponse.isAcknowledged();
     }
 
-    public static String getJsonMapping(String indexType,Class object) {
-        String template = "{\"{indexType}\":{\"properties\":{{#}}}}";
+    public static String getJsonMapping(String indexType,Class object,String ttl) {
+        String template=null;
+        if(ttl==null){
+            template = "{\"{indexType}\":{\"properties\":{{#}}}}";
+
+        }else{
+            template = "{\"{indexType}\":{\"_ttl\":{\"enabled\":true,\"default\":\""+ttl+"\"},\"properties\":{{#}}}}";
+        }
         template = template.replace("{indexType}", indexType);
         String fieldString = getClassMapping(object);
         template = template.replace("{#}", fieldString);
@@ -105,8 +117,14 @@ public class ElasticSearchUtil {
     }
 
     // 向ES index 中 indexType  mapping 添加 一列
-    public static String getJsonMapping(String indexType, List<TableSchema> schemas){
-        String template = "{\"{indexType}\":{\"properties\":{{#}}}}";
+    public static String getJsonMapping(String indexType, List<TableSchema> schemas,String ttl){
+        String template=null;
+        if(ttl==null){
+            template = "{\"{indexType}\":{\"properties\":{{#}}}}";
+
+        }else{
+            template = "{\"{indexType}\":{\"_ttl\":{\"enabled\":true,\"default\":\""+ttl+"\"},\"properties\":{{#}}}}";
+        }
         template = template.replace("{indexType}", indexType);
         StringBuilder fieldstring = new StringBuilder();
         for(int i=0; i< schemas.size();i++) {
@@ -125,7 +143,7 @@ public class ElasticSearchUtil {
         return template;
     }
 
-    public static boolean DoMapping(String indexName, String indexType, String template) {
+    public static boolean DoMapping(String indexName, String indexType, String template) throws Exception{
         System.out.println(template);
         try {
             if (existsIndex(indexName)) {
@@ -217,7 +235,14 @@ public class ElasticSearchUtil {
         for(int i=0;i<items.size();i++){
             Object o = items.get(i);
             String s = JSON.toJSONString(o);
+            System.out.println(s);
             indexRequestBuilder.setSource(s).execute().actionGet();
         }
+    }
+
+    @Test
+    public static  void testCreate() throws IOException {
+
+
     }
 }
