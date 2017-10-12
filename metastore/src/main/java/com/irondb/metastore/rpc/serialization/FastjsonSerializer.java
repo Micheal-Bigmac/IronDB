@@ -8,6 +8,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
  * Created by Micheal on 2017/10/3.
  */
 public class FastjsonSerializer implements Serializer {
+
     @Override
     public <T> byte[] serializer(T obj) {
         return JSON.toJSONBytes(obj, SerializerFeature.SortField);
