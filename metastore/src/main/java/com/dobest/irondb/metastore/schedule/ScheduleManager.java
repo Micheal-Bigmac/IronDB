@@ -1,10 +1,6 @@
 package com.dobest.irondb.metastore.schedule;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
@@ -44,7 +40,6 @@ public class ScheduleManager {
 	}
 
 	public void trigger() {
-		
 		for(Schedule schedule : schedules) {
 			Timer timer=new Timer();
 			TimerTask task=new TimerTask() {
@@ -53,7 +48,9 @@ public class ScheduleManager {
 					schedule.start();
 				}
 			};
-			timer.schedule(task, schedule.period());
+			long period = schedule.period();
+			Date startDate=new Date(period);
+			timer.schedule(task,startDate);
 			timers.put(schedule.getName(), timer);
 		}
 	}

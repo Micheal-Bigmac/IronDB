@@ -1,7 +1,6 @@
 package com.dobest.irondb.metastore.schedule;
 
 import com.dobest.irondb.metastore.bean.ResultCode;
-import com.dobest.irondb.metastore.executor.ESTaskMonitor;
 
 public class ESProcessor implements Processor{
 	private ResultCode code;
@@ -17,7 +16,7 @@ public class ESProcessor implements Processor{
 	@Override
 	public void processHandler() {
 		// TODO Auto-generated method stub
-		ESTaskMonitor.DropOption(code, typeName);
+//		ESTaskMonitor.DropOption(code, typeName);
 	}
 
 }

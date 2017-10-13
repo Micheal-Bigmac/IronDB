@@ -2,13 +2,12 @@ package com.dobest.irondb.metastore.schedule;
 
 import java.util.Timer;
 
-public  class ScheduleAdapter implements Schedule{
+public abstract class AbstractSchedule implements Schedule{
 	private long period_Time;
 	// 不同定时器不同类型  暂时未实现
 	private ScheduleManager scheduleManager;
 	private boolean flag=false;
 
-	
 	public long getPeriod_Time() {
 		return period_Time;
 	}
@@ -24,12 +23,7 @@ public  class ScheduleAdapter implements Schedule{
 	public void setScheduleManager(ScheduleManager scheduleManager) {
 		this.scheduleManager = scheduleManager;
 	}
-	
 
-	@Override
-	public void start() {
-		
-	}
 
 	@Override
 	public void stop() {

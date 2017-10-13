@@ -1,6 +1,8 @@
 package com.dobest.irondb.metastore.schedule;
 
 
+import java.util.Date;
+
 public interface Schedule {
 
 	long period();
