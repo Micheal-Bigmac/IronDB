@@ -1,6 +1,7 @@
 package com.dobest.irondb.metastore.schedule;
 
 import com.dobest.irondb.metastore.bean.ResultCode;
+import com.dobest.irondb.metastore.executor.HbaseMonitor;
 
 public class HbaseProcessor implements Processor {
 

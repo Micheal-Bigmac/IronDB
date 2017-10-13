@@ -31,7 +31,7 @@ public class MysqlProcessor implements Processor {
 	@Override
 	public void processHandler() {
 		// TODO Auto-generated method stub
-//		MysqlTakMonitor.DropOptions(code, tableName, metaDataCache, connectPool, executorService);
+		MysqlTakMonitor.DropOptions(code, tableName, metaDataCache, connectPool, executorService);
 	}
 
 }
