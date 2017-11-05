@@ -8,6 +8,7 @@ public class Trie {
     private int SIZE = 26;
     private TrieNode root;//字典树的根
 
+
     Trie() //初始化字典树
     {
         root = new TrieNode();
