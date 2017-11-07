@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * 该类 是个工厂类 根据不同的 外部存储 产生对应的 connection  同时把文件中多行同属于一条Sql 转换成 一行一条SQL
+ * @author micheal bigmac
  */
 public class IronDbSchemeFactory {
     public static final String DB_DERBY = "derby";
@@ -180,19 +181,23 @@ public class IronDbSchemeFactory {
             }
         }
 
+        @Override
         public boolean isNonExecCommand(String dbCommand) {
             return (dbCommand.startsWith("--") || dbCommand.startsWith("#"));
         }
 
+        @Override
         public String getDelimiter() {
             return DEFAULT_DELIMITER;
         }
 
+        @Override
         public String getQuoteCharacter() {
             return DEFAULT_QUOTE;
         }
 
 
+        @Override
         public String cleanseCommand(String dbCommand) {
             // strip off the delimiter
             if (dbCommand.endsWith(getDelimiter())) {
@@ -202,15 +207,18 @@ public class IronDbSchemeFactory {
             return dbCommand;
         }
 
+        @Override
         public boolean needsQuotedIdentifier() {
             return false;
         }
 
+        @Override
         public String buildCommand(
                 String scriptDir, String scriptFile) throws IllegalFormatException, IOException {
             return buildCommand(scriptDir, scriptFile, false);
         }
 
+        @Override
         public String buildCommand(
                 String scriptDir, String scriptFile, boolean fixQuotes) throws IllegalFormatException, IOException {
             BufferedReader bfReader =
@@ -293,6 +301,7 @@ public class IronDbSchemeFactory {
             super(dbOpts, msUsername, msPassword, conf);
         }
 
+        @Override
         public String getScriptName(String dbCommand) throws IllegalArgumentException {
 
             if (!isNestedScript(dbCommand)) {
@@ -305,6 +314,7 @@ public class IronDbSchemeFactory {
             return tokens[1].replace(";", "").replaceAll("'", "");
         }
 
+        @Override
         public boolean isNestedScript(String dbCommand) {
             // Derby script format is RUN '<file>'
             return dbCommand.startsWith(DERBY_NESTING_TOKEN);
@@ -327,6 +337,7 @@ public class IronDbSchemeFactory {
             return nestedDbCommandParser.getQuoteCharacter();
         }
 
+        @Override
         public String getScriptName(String dbCommand) throws IllegalArgumentException {
 
             if (!isNestedScript(dbCommand)) {
@@ -339,6 +350,7 @@ public class IronDbSchemeFactory {
             return tokens[1].replace(";", "");
         }
 
+        @Override
         public boolean isNestedScript(String dbCommand) {
             return dbCommand.startsWith(HIVE_NESTING_TOKEN);
         }
@@ -369,6 +381,7 @@ public class IronDbSchemeFactory {
             return isPartial;
         }
 
+        @Override
         public String getScriptName(String dbCommand) throws IllegalArgumentException {
             String[] tokens = dbCommand.split(" ");
             if (tokens.length != 2) {
@@ -378,10 +391,12 @@ public class IronDbSchemeFactory {
             return tokens[1].replace(";", "");
         }
 
+        @Override
         public boolean isNestedScript(String dbCommand) {
             return dbCommand.startsWith(MYSQL_NESTING_TOKEN);
         }
 
+        @Override
         public String getDelimiter() {
             return delimiter;
         }
@@ -418,6 +433,7 @@ public class IronDbSchemeFactory {
             super(dbOpts, msUsername, msPassword, conf);
         }
 
+        @Override
         public String getScriptName(String dbCommand) throws IllegalArgumentException {
             String[] tokens = dbCommand.split(" ");
             if (tokens.length != 2) {
@@ -427,14 +443,17 @@ public class IronDbSchemeFactory {
             return tokens[1].replace(";", "");
         }
 
+        @Override
         public boolean isNestedScript(String dbCommand) {
             return dbCommand.startsWith(POSTGRES_NESTING_TOKEN);
         }
 
+        @Override
         public boolean needsQuotedIdentifier() {
             return true;
         }
 
+        @Override
         public boolean isNonExecCommand(String dbCommand) {
             // Skip "standard_conforming_strings" command which is read-only in older
             // Postgres versions like 8.1
@@ -457,6 +476,7 @@ public class IronDbSchemeFactory {
             super(dbOpts, msUsername, msPassword, conf);
         }
 
+        @Override
         public String getScriptName(String dbCommand) throws IllegalArgumentException {
             if (!isNestedScript(dbCommand)) {
                 throw new IllegalArgumentException("Not a nested script format " + dbCommand);
@@ -465,6 +485,7 @@ public class IronDbSchemeFactory {
             return dbCommand.replace(";", "").replace(ORACLE_NESTING_TOKEN, "");
         }
 
+        @Override
         public boolean isNestedScript(String dbCommand) {
             return dbCommand.startsWith(ORACLE_NESTING_TOKEN);
         }
@@ -479,6 +500,7 @@ public class IronDbSchemeFactory {
             super(dbOpts, msUsername, msPassword, conf);
         }
 
+        @Override
         public String getScriptName(String dbCommand) throws IllegalArgumentException {
             String[] tokens = dbCommand.split(" ");
             if (tokens.length != 2) {
@@ -487,6 +509,7 @@ public class IronDbSchemeFactory {
             return tokens[1];
         }
 
+        @Override
         public boolean isNestedScript(String dbCommand) {
             return dbCommand.startsWith(MSSQL_NESTING_TOKEN);
         }

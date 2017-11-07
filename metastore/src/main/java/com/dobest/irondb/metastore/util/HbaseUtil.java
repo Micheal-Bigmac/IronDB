@@ -29,7 +29,7 @@ public class HbaseUtil {
 
      static {
         conf = HBaseConfiguration.create();
-         String s = IronDBContext.get("hbase.zookeeper.quorum");
+         String s = IronDBContext.context.getInstance().get("hbase.zookeeper.quorum");
          conf.set("hbase.zookeeper.quorum",s);
         try {
             hAdmin = new HBaseAdmin(conf);
@@ -108,5 +108,13 @@ public class HbaseUtil {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static boolean truncateHbaseTable(String table) throws IOException {
+        HTableDescriptor tableDescriptor = hAdmin.getTableDescriptor(table.getBytes());
+        hAdmin.disableTable(table);
+         hAdmin.deleteTable(table);
+         hAdmin.createTable(tableDescriptor);
+         return true;
     }
 }

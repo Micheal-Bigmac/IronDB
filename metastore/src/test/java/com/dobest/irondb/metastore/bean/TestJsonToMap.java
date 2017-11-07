@@ -1,5 +1,7 @@
 package com.dobest.irondb.metastore.bean;
 
+import org.junit.Test;
+
 import java.lang.reflect.Type;
 
 public class TestJsonToMap<T> {
@@ -12,5 +14,25 @@ public class TestJsonToMap<T> {
         Class<? extends TestJsonToMap> aClass = test.getClass();
         Type genericSuperclass = aClass.getGenericSuperclass();
         System.out.println();
+    }
+
+    @Test
+    public void test1(){
+        ErrorType errorType= ErrorType.TableExits;
+        ErrorType type1= ErrorType.TableExits;
+        ErrorType type2=ErrorType.DropError;
+
+        if(errorType==type1){
+            System.out.println(errorType+"  == "+ type1);
+        }else{
+            System.out.println(errorType+"  ！= "+ type1);
+
+        }
+        if(type1==type2){
+            System.out.println(type1+"  == "+ type2);
+        }else{
+            System.out.println(type1+"  != "+ type2);
+        }
+
     }
 }

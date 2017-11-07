@@ -17,18 +17,22 @@ import java.util.concurrent.ThreadFactory;
 
 /**
  * Created by Micheal on 2017/10/2.
+ * @author : Micheal Bigmac
  */
-public abstract class Server {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+public abstract class AbstractServer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractServer.class);
     private EventLoopGroup boosGroup;
     private EventLoopGroup workerGroup;
     protected volatile ByteBufAllocator allocator;
     private IronDBContext context;
-    private static final int Task_Group = Runtime.getRuntime().availableProcessors(); //CPU Core
+    private static final int TASK_GROUP = Runtime.getRuntime().availableProcessors(); //CPU Core
 
     private int workers = 0;  // 工作组 数量 0 default  == cup*2
     private ChannelHandler handler;
 
+    /**
+     * 用于配置server 启动需要的配置项
+     */
     public abstract void configure();
 
 
@@ -59,7 +63,9 @@ public abstract class Server {
      * }
      */
 
-//  TCP层面的接收和发送缓冲区大小设置  应ChannelOption的SO_SNDBUF和SO_RCVBUF，需要根据推送消息的大小，合理设置
+    /**
+     * TCP层面的接收和发送缓冲区大小设置  应ChannelOption的SO_SNDBUF和SO_RCVBUF，需要根据推送消息的大小，合理设置
+      */
     public void start() {
         configure();
         LOGGER.info("启动netty服务器");
@@ -85,10 +91,10 @@ public abstract class Server {
             bootstarp.childHandler(handler);
         }
 
-        final boolean ssl = context.getBoolean("mqtt.ssl.enabled");
-        final String host = context.getString("mqtt.host");
-        final int port = ssl ? context.getInt("mqtt.ssl.port") : context.getInt("mqtt.port");
-        final int keepAliveMax = context.getInt("mqtt.keepalive.max", 50);
+        final boolean ssl = IronDBContext.getInstance().getBoolean("mqtt.ssl.enabled");
+        final String host =IronDBContext.getInstance().getString("mqtt.host");
+        final int port = ssl ? IronDBContext.getInstance().getInt("mqtt.ssl.port") :  IronDBContext.getInstance().getInt("mqtt.port");
+        final int keepAliveMax = IronDBContext.getInstance().getInt("mqtt.keepalive.max", 50);
 
         try {
             ChannelFuture future = bootstarp.bind(host, port).sync();

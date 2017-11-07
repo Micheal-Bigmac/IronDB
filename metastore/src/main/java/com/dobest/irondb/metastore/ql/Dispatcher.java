@@ -195,12 +195,14 @@ public class Dispatcher {
 
     public static void main(String[] args) {
         String sql2 = "create table user_image8(uid LONG max,name INT  bitmap,birthday Date,first_logintime long,province array auto_dimension,love_game map auto_dimension) PRIMARY_KEY(uid,name) TTL 86400;";
+        String sql3="   create table test( uid string 唯一id ,nid string ,name string, province string,city string,day string) GROUP_SETS ('time,provice,city','time,provice')";
+
 //        String sql3="drop table user_image";
 //        String sql3="TRUNCATE TABLE table_name;";
-        String sql3="load data into table override inpath /root/path";
+//        String sql3="load data into table override inpath /root/path";
         IronDBContext ironDBContext = IronDBContext.fromInputStream(MetaStoreTool.class.getResourceAsStream("/IronDB.properties"));
         Dispatcher dispatcher = new Dispatcher(ironDBContext);
-        dispatcher.parseSql(sql2);
+        dispatcher.parseSql(sql3);
     }
 
 

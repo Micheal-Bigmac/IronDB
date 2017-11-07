@@ -132,6 +132,7 @@ public class TokenUtil {
             super();
         }
 
+        @Override
         public void run() {
             logger.info("\n**************************执行监听token列表****************************");
             try {

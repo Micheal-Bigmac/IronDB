@@ -11,6 +11,9 @@ import org.elasticsearch.action.admin.indices.exists.types.TypesExistsResponse;
 import org.elasticsearch.action.admin.indices.mapping.delete.DeleteMappingResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
+import org.elasticsearch.action.deletebyquery.DeleteByQueryAction;
+import org.elasticsearch.action.deletebyquery.DeleteByQueryRequestBuilder;
+import org.elasticsearch.action.deletebyquery.DeleteByQueryResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
@@ -22,6 +25,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.engine.Engine;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,13 +41,14 @@ public class ElasticSearchUtil {
     private static final Logger log = LoggerFactory.getLogger(ElasticSearchUtil.class);
     private static Client client = null;
     private static IndicesAdminClient adminClient;
-    private static final String host = "10.241.95.218";
-//    private static final String host = "10.191.73.218";
+    private static final String host = "10.191.73.218";
+//    private static final String host = "110.110.110.110";
 
     private static Client getClient() throws UnknownHostException {
         Settings settings = ImmutableSettings.settingsBuilder().put("cluster.name", "elasticsearch").build();
+        InetAddress byName = InetAddress.getByName(host);
         Client client = new TransportClient(settings)
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), 9300));
+                .addTransportAddress(new InetSocketTransportAddress(byName, 9300));
         return client;
     }
 
@@ -60,7 +65,7 @@ public class ElasticSearchUtil {
     /**
      * 判断ElasticSearch中的索引是否存在   同时还需要判断 index 下面的 type 是否存在
      */
-    private static boolean existsIndex(String index) {
+    public static boolean existsIndex(String index) {
         IndicesExistsRequest request = new IndicesExistsRequest(index);
         IndicesExistsResponse response = adminClient.exists(request).actionGet();
         if (response.isExists()) {
@@ -129,16 +134,20 @@ public class ElasticSearchUtil {
         StringBuilder fieldstring = new StringBuilder();
         for(int i=0; i< schemas.size();i++) {
             TableSchema schema = schemas.get(i);
-            fieldstring.append("\"" + schema.getColumn_name().toLowerCase() + "\": {")
-                    .append("\"type\": \"")
-                    .append(GetElasticSearchMappingType(schema.getType())).append("");
-            if (i ==  schemas.size() - 1) {
-                fieldstring.append("}");
-            } else {
-                fieldstring.append("},");
+            String type = schema.getType();
+            if(!"array".equals(schema.getType())) {
+                fieldstring.append("\"" + schema.getColumn_name().toLowerCase() + "\": {")
+                        .append("\"type\": \"")
+                        .append(GetElasticSearchMappingType(schema.getType())).append("");
+                if (i == schemas.size() - 1) {
+                    fieldstring.append("}");
+                } else {
+                    fieldstring.append("},");
+                }
             }
         }
         String json=fieldstring.toString();
+        json=json.replaceAll("(.*).$","$1");
         template = template.replace("{#}",json);
         return template;
     }
@@ -240,9 +249,11 @@ public class ElasticSearchUtil {
         }
     }
 
-    @Test
-    public static  void testCreate() throws IOException {
-
-
+    public static  boolean truncate(String index,String type) throws IOException {
+        StringBuilder b = new StringBuilder();
+        b.append("{\"query\":{\"match_all\":{}}}");
+        DeleteByQueryRequestBuilder response = new DeleteByQueryRequestBuilder(client);
+        DeleteByQueryResponse indexDeleteByQueryResponses = response.setIndices(index).setTypes(type).setSource(b.toString()).execute().actionGet();
+        return true;
     }
 }

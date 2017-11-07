@@ -7,6 +7,7 @@ import net.sf.jsqlparser.parser.CCJSqlParser;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
+import net.sf.jsqlparser.statement.truncate.Truncate;
 import org.junit.Test;
 
 import java.util.regex.Matcher;
@@ -40,9 +41,9 @@ public class TestSqlDefinitor {
         String sql8_1="ALTER TABLE table_name DROP INDEX 22";   //errir*/
 
         String sql9_1="CREATE VIEW view_name (column_name ,name ,age) AS SELECT a, b, c, COUNT(DISTINCT d) FROM table_name GROUP BY a, b, c";
-        Statement stmt = CCJSqlParserUtil.parse(sql3);
+        Statement stmt = CCJSqlParserUtil.parse(sql5);
 
-        boolean b = stmt instanceof CreateTable;
+        boolean b = stmt instanceof Truncate;
         System.out.println(b);
     }
     @Test

@@ -31,6 +31,7 @@ public class Token implements Serializable {
     }
 
 
+    @Override
     public int hashCode() {
         return signature.hashCode();
     }

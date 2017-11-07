@@ -12,11 +12,10 @@ import com.google.common.collect.Maps;
 
 public class IronDBContext {
     private Map<String, String> parameters;
-    private static IronDBContext context;
+    public static IronDBContext context;
 
     public IronDBContext() {
         parameters = Collections.synchronizedMap(new HashMap<String, String>());
-        context=this;
     }
 
     public IronDBContext(Map<String, String> paramters) {
@@ -24,11 +23,11 @@ public class IronDBContext {
         this.putAll(paramters);
     }
 
-    public static String getMetaStoreScript() {
+    public String getMetaStoreScript() {
         return get("IronDb.metastore.initSql.script");
     }
 
-    public static String getUrl() {
+    public String getUrl() {
         return get("IronDb.metastore.mysql.uri");
     }
 
@@ -46,64 +45,58 @@ public class IronDBContext {
         return new IronDBContext(Maps.fromProperties(properties));
     }
 
-    public static IronDBContext fromInputStream() {
-        Properties properties = new Properties();
-        InputStream resAsStream=null;
-        try {
-            resAsStream= IronDBContext.class.getResourceAsStream("/IronDB.properties");
-            properties.load(resAsStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if(resAsStream!=null) {
-                try {
-                    resAsStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+    public static IronDBContext getInstance() {
+        if (context == null) {
+            Properties properties = new Properties();
+            InputStream resAsStream = null;
+            try {
+                resAsStream = IronDBContext.class.getResourceAsStream("/IronDB.properties");
+                properties.load(resAsStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (resAsStream != null) {
+                    try {
+                        resAsStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+            context = new IronDBContext(Maps.fromProperties(properties));
         }
-        return new IronDBContext(Maps.fromProperties(properties));
+        return context;
     }
 
-    public static String get(String key) {
-        return context.parameters.get(key);
-    }
-
-
-    public  static void put(String key, String value) {
-        context.parameters.put(key, value);
+    public String get(String key) {
+        return parameters.get(key);
     }
 
 
-    public static  boolean containsKey(String key) {
-        return context.parameters.containsKey(key);
+    public void put(String key, String value) {
+        parameters.put(key, value);
     }
 
 
-    public  static Boolean getBoolean(String key, Boolean defaultValue) {
-        String value =  context.parameters.get(key);
+    public boolean containsKey(String key) {
+        return containsKey(key);
+    }
+
+
+    public Boolean getBoolean(String key, Boolean defaultValue) {
+        String value = get(key);
         if (value != null) {
             return Boolean.parseBoolean(value.trim());
         }
         return defaultValue;
     }
 
-    public  static Boolean getBoolean(String key) {
+    public Boolean getBoolean(String key) {
         return getBoolean(key, null);
     }
 
 
-
-    public  static Integer getInteger(String key, Integer defaultValue) {
-        String value =  context.parameters.get(key);
-        if (value != null) {
-            return Integer.parseInt(value.trim());
-        }
-        return defaultValue;
-    }
-
-    public static  int getInt(String key, int defaultValue) {
+    public Integer getInteger(String key, Integer defaultValue) {
         String value = get(key);
         if (value != null) {
             return Integer.parseInt(value.trim());
@@ -111,7 +104,15 @@ public class IronDBContext {
         return defaultValue;
     }
 
-    public static  int getInt(String key) {
+    public int getInt(String key, int defaultValue) {
+        String value = get(key);
+        if (value != null) {
+            return Integer.parseInt(value.trim());
+        }
+        return defaultValue;
+    }
+
+    public int getInt(String key) {
         String value = get(key);
         if (value != null) {
             return Integer.parseInt(value.trim());
@@ -120,19 +121,19 @@ public class IronDBContext {
     }
 
 
-    public  Integer getInteger(String key) {
+    public Integer getInteger(String key) {
         return getInteger(key, null);
     }
 
-    public  Long getLong(String key, Long defaultValue) {
-        String value =  context.parameters.get(key);
+    public Long getLong(String key, Long defaultValue) {
+        String value = get(key);
         if (value != null) {
             return Long.parseLong(value.trim());
         }
         return defaultValue;
     }
 
-    public  Long getLong(String key) {
+    public Long getLong(String key) {
         return getLong(key, null);
     }
 
@@ -140,12 +141,12 @@ public class IronDBContext {
 //        return get(key, defaultValue);
 //    }
 
-    public static  String getString(String key) {
-        return context.parameters.get(key);
+    public String getString(String key) {
+        return get(key);
     }
 
-    private  String get(String key, String defaultValue) {
-        String result =  context.parameters.get(key);
+    private String get(String key, String defaultValue) {
+        String result = get(key);
         if (result != null) {
             return result;
         }

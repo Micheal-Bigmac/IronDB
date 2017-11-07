@@ -1,0 +1,51 @@
+options{
+    DEBUG_PARSER=true;
+}
+
+PARSER_BEGIN(Adder)
+package com.dobest.irondb.metastore.javacc;
+public class Adder{
+    public static void main(String[] args)  throws ParseException, TokenMgrError{
+        Adder adder= new Adder(System.in);
+        System.out.println(adder.start());
+    }
+}
+PARSER_END(Adder)
+
+SKIP:{
+    " "
+    | "\t"
+    | "\n"
+    | "\r"
+    | "\r\n"
+}
+
+TOKEN:{
+    <PLUS :"+">
+    |<NUMBER:(["0"-"9"])+>
+}
+
+int start() throws NumberFormatException:
+{
+    Token a;
+    int i;
+    int value;
+}
+{
+    value=primary()
+    (
+        <PLUS>
+        i=primary()
+        {value += i;}
+        )*<EOF>
+    {return value;}
+}
+
+int primary() throws NumberFormatException:
+{
+    Token t;
+}
+{
+    t=<NUMBER>
+    {return Integer.parseInt(t.image);}
+}

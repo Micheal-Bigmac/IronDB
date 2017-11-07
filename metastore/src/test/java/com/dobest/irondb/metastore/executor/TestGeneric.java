@@ -7,6 +7,9 @@ import java.util.List;
 
 public class TestGeneric {
 
+    public void test(){
+        System.out.println(this.getClass().getName());
+    }
     public static void main(String []args){
         List<String>  sqls=new ArrayList<>();
         sqls.add("1--");
@@ -14,6 +17,9 @@ public class TestGeneric {
         sqls.add("3--");
         System.out.println(StringUtils.join(sqls,"|"));
 
+        TestGeneric generic=new TestGeneric();
+        generic.test();
+//        System.out.println();
 
 //        Class<? extends TestBean> aClass = test.getClass();
 //        String typeName = aClass.getTypeName();
